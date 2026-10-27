@@ -1,0 +1,298 @@
+{
+  "run_id": "580899c3",
+  "base": "https://kv-bench.SUBDOMAIN.workers.dev",
+  "mode_a": [
+    {
+      "key": "bench:a:580899c3:0",
+      "latency_s": 0.15830790001200512,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:1",
+      "latency_s": 0.15324379998492077,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:2",
+      "latency_s": 0.20118440000806004,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:3",
+      "latency_s": 0.1450685999589041,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:4",
+      "latency_s": 0.19366429996443912,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:5",
+      "latency_s": 0.10651499999221414,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:6",
+      "latency_s": 0.19461949996184558,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:7",
+      "latency_s": 0.18867609999142587,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:8",
+      "latency_s": 0.17388350004330277,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:9",
+      "latency_s": 0.11326819995883852,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:10",
+      "latency_s": 0.12992949999170378,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:11",
+      "latency_s": 0.2017479999922216,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:12",
+      "latency_s": 0.12714460003189743,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:13",
+      "latency_s": 0.16831850004382432,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:14",
+      "latency_s": 0.10053329996298999,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:15",
+      "latency_s": 0.1410598999937065,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:16",
+      "latency_s": 0.17754460003925487,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:17",
+      "latency_s": 0.16795049997745082,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:18",
+      "latency_s": 0.18511540000326931,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:19",
+      "latency_s": 0.1675453000352718,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:20",
+      "latency_s": 0.126333300024271,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:21",
+      "latency_s": 0.13912820001132786,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:22",
+      "latency_s": 0.1312105000251904,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:23",
+      "latency_s": 0.16419649997260422,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:24",
+      "latency_s": 0.07954250002512708,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:25",
+      "latency_s": 0.13685449998592958,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:26",
+      "latency_s": 0.17848050000611693,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:27",
+      "latency_s": 0.16298369999276474,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:28",
+      "latency_s": 0.1092396000167355,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:29",
+      "latency_s": 0.17724039999302477,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:30",
+      "latency_s": 0.1195319999824278,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:31",
+      "latency_s": 0.1469523999840021,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:32",
+      "latency_s": 0.11364319996209815,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:33",
+      "latency_s": 0.11207809997722507,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:34",
+      "latency_s": 0.15161090000765398,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:35",
+      "latency_s": 0.17175319994566962,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:36",
+      "latency_s": 0.1585324999759905,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:37",
+      "latency_s": 0.1656148000038229,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:38",
+      "latency_s": 0.10319659998640418,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:39",
+      "latency_s": 0.09895959997083992,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:40",
+      "latency_s": 0.13033690000884235,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:41",
+      "latency_s": 0.1503054000204429,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:42",
+      "latency_s": 0.15743349998956546,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:43",
+      "latency_s": 0.16432380001060665,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:44",
+      "latency_s": 0.14531200000783429,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:45",
+      "latency_s": 0.16533579997485504,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:46",
+      "latency_s": 0.08783360000234097,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:47",
+      "latency_s": 0.13745249999919906,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:48",
+      "latency_s": 0.11252680001780391,
+      "polls": 1
+    },
+    {
+      "key": "bench:a:580899c3:49",
+      "latency_s": 0.14735829998971894,
+      "polls": 1
+    }
+  ],
+  "mode_b": [
+    {
+      "key": "bench:b:580899c3:0",
+      "latency_s": 0.1437455000123009,
+      "polls": 1
+    },
+    {
+      "key": "bench:b:580899c3:1",
+      "latency_s": 0.1051978999748826,
+      "polls": 1
+    },
+    {
+      "key": "bench:b:580899c3:2",
+      "latency_s": 0.12251319998176768,
+      "polls": 1
+    },
+    {
+      "key": "bench:b:580899c3:3",
+      "latency_s": 0.5170140999834985,
+      "polls": 2
+    },
+    {
+      "key": "bench:b:580899c3:4",
+      "latency_s": 0.11849929997697473,
+      "polls": 1
+    },
+    {
+      "key": "bench:b:580899c3:5",
+      "latency_s": 0.1300333999679424,
+      "polls": 1
+    },
+    {
+      "key": "bench:b:580899c3:6",
+      "latency_s": 0.12090629996964708,
+      "polls": 1
+    },
+    {
+      "key": "bench:b:580899c3:7",
+      "latency_s": 0.12220990000059828,
+      "polls": 1
+    }
+  ]
+}

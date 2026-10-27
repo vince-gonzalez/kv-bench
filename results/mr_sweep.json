@@ -1,0 +1,136 @@
+{
+  "run_id": "bdde13aa",
+  "base": "https://kv-bench-mr.SUBDOMAIN.workers.dev",
+  "regions": [
+    "enam",
+    "wnam",
+    "weur",
+    "eeur",
+    "apac",
+    "oc"
+  ],
+  "placement": {
+    "enam": "ATL",
+    "wnam": "SJC",
+    "weur": "MAD",
+    "eeur": "VIE",
+    "apac": "SIN",
+    "oc": "MEL"
+  },
+  "trials": [
+    {
+      "key": "mr:bdde13aa:0",
+      "primed_colo": {
+        "enam": "ATL",
+        "wnam": "SJC",
+        "weur": "MAD",
+        "eeur": "VIE",
+        "apac": "SIN",
+        "oc": "MEL"
+      },
+      "flip_s": {
+        "enam": 51.42426539998269,
+        "wnam": 52.50758460001089,
+        "weur": 52.19396060000872,
+        "eeur": 54.7443013000302,
+        "apac": 54.36074989999179,
+        "oc": 52.91711350000696
+      }
+    },
+    {
+      "key": "mr:bdde13aa:1",
+      "primed_colo": {
+        "enam": "ATL",
+        "wnam": "SJC",
+        "weur": "MAD",
+        "eeur": "VIE",
+        "apac": "SIN",
+        "oc": "MEL"
+      },
+      "flip_s": {
+        "enam": 51.296253200038336,
+        "wnam": 52.256781100004446,
+        "weur": 51.96170000004349,
+        "eeur": 54.482423700043,
+        "apac": 54.100088400009554,
+        "oc": 52.652189400047064
+      }
+    },
+    {
+      "key": "mr:bdde13aa:2",
+      "primed_colo": {
+        "enam": "ATL",
+        "wnam": "SJC",
+        "weur": "MAD",
+        "eeur": "VIE",
+        "apac": "SIN",
+        "oc": "MEL"
+      },
+      "flip_s": {
+        "enam": 51.95490249997238,
+        "wnam": 52.9704681999865,
+        "weur": 52.720577500003856,
+        "eeur": 52.33445219998248,
+        "apac": 54.85107109998353,
+        "oc": 53.38226869999198
+      }
+    },
+    {
+      "key": "mr:bdde13aa:3",
+      "primed_colo": {
+        "enam": "ATL",
+        "wnam": "SJC",
+        "weur": "MAD",
+        "eeur": "VIE",
+        "apac": "SIN",
+        "oc": "MEL"
+      },
+      "flip_s": {
+        "enam": 52.4337829000433,
+        "wnam": 53.350133700005244,
+        "weur": 53.028701000032015,
+        "eeur": 52.71636319998652,
+        "apac": 52.279288200021256,
+        "oc": 53.74587819998851
+      }
+    },
+    {
+      "key": "mr:bdde13aa:4",
+      "primed_colo": {
+        "enam": "ATL",
+        "wnam": "SJC",
+        "weur": "MAD",
+        "eeur": "VIE",
+        "apac": "SIN",
+        "oc": "MEL"
+      },
+      "flip_s": {
+        "enam": 53.03371950000292,
+        "wnam": 53.87059870001394,
+        "weur": 53.58340850000968,
+        "eeur": 53.31984489999013,
+        "apac": 52.84487860003719,
+        "oc": 51.4528932000394
+      }
+    },
+    {
+      "key": "mr:bdde13aa:5",
+      "primed_colo": {
+        "enam": "ATL",
+        "wnam": "SJC",
+        "weur": "MAD",
+        "eeur": "VIE",
+        "apac": "SIN",
+        "oc": "MEL"
+      },
+      "flip_s": {
+        "enam": 0.6601160000427626,
+        "wnam": 51.120739400037564,
+        "weur": 53.551498700049706,
+        "eeur": 53.27781070000492,
+        "apac": 52.96468269999605,
+        "oc": 51.58463789999951
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+# KV-BENCH-MR v0.2.0 — Cloudflare Workers + Durable Objects config
+# F-Keys LLC | www.f-keys.com
+#
+# Placeholder KV id on purpose (safe to publish). Deploy from a throwaway copy
+# with the real id injected; never commit a real id. Reuses the kv-bench BENCH
+# namespace. Account resolves from CLOUDFLARE_ACCOUNT_ID / wrangler OAuth.
+
+name = "kv-bench-mr"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+kv_namespaces = [
+  { binding = "BENCH", id = "REPLACE_WITH_NAMESPACE_ID" }
+]
+
+[[durable_objects.bindings]]
+name = "READER"
+class_name = "RegionReader"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RegionReader"]

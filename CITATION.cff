@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software or its findings, please cite them."
+title: "KV-Bench: measured read-after-write and cross-region staleness for Cloudflare Workers KV"
+authors:
+  - family-names: Gonzalez
+    given-names: Vince
+    orcid: https://orcid.org/0009-0005-3640-014X
+    email: vincegonzalez@me.com
+version: 0.2.0
+date-released: 2026-10-27
+repository-code: https://github.com/vince-gonzalez/kv-bench
+license: MIT

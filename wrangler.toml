@@ -1,0 +1,15 @@
+# KV-BENCH v0.1.0 — Cloudflare Workers config
+# F-Keys LLC | www.f-keys.com
+#
+# The namespace id below is a PLACEHOLDER on purpose: this file is safe to
+# publish. Deploy from a throwaway copy with the real id injected; never
+# commit a real namespace id. Account is resolved from CLOUDFLARE_ACCOUNT_ID
+# / wrangler OAuth, so no account_id is baked in here.
+
+name = "kv-bench"
+main = "worker/index.js"
+compatibility_date = "2026-10-01"
+
+kv_namespaces = [
+  { binding = "BENCH", id = "REPLACE_WITH_NAMESPACE_ID" }
+]
