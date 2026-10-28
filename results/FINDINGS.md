@@ -1,8 +1,16 @@
-# KV-Bench Findings v0.2.0
+# KV-Bench Findings v0.3.0
 
-Cloudflare Workers KV, Workers **free** tier, 2026-10-27.
+Cloudflare Workers KV, Workers **free** tier, 2026-10-27 / 2026-10-28.
 Raw data: `sweep.json` (single-region, run `580899c3`),
-`mr/mr_sweep.json` (cross-region, run `bdde13aa`).
+`mr_sweep.json` (cross-region, run `bdde13aa`),
+`ct_sweep.json` (cacheTtl sweep, run `017c364a`).
+
+CHANGE LOG v0.2.0 → v0.3.0
+- Swept `cacheTtl` across its documented range (30/60/120/300/600 s) in 3 regions,
+  2 trials each, to answer the question v0.2.0 left open: does the stale window
+  move with the `cacheTtl` you set? It does — linearly (`mr/cachettl.py`).
+- Corrected a spec detail: the `cacheTtl` floor is **30 s**, not 60 s; 60 s is the
+  default (Cloudflare KV read docs).
 
 CHANGE LOG v0.1.0 → v0.2.0
 - Added the cross-region half: 6 Durable Objects pinned by `locationHint` to 6
@@ -59,6 +67,44 @@ The single enam outlier (0.7 s on trial 6, vs ~52 s otherwise) is the writing
 colo bleeding through: when the reader colo coincides with the colo that issued
 the write, it is read-your-writes (finding 1), not a cached cross-region read.
 
+## 3. The stale window scales with cacheTtl — linearly (v0.3.0)
+
+v0.2.0 measured one point (the 60 s default) and left the obvious question open:
+is that ~53 s a property of KV, or just of the default `cacheTtl`? It is the
+`cacheTtl`. Setting `cacheTtl` explicitly on the read and sweeping it across the
+documented range moves the window in direct proportion. 3 regions (SJC, MAD, SIN),
+2 trials each, 30/30 cells resolved:
+
+| cacheTtl (s) | n | min (s) | median (s) | max (s) | median ÷ cacheTtl |
+|---|---|---|---|---|---|
+| 30  | 6 | 20.4  | 24.4  | 25.4  | 0.81 |
+| 60  | 6 | 51.3  | 54.5  | 55.0  | 0.91 |
+| 120 | 6 | 102.0 | 104.3 | 105.9 | 0.87 |
+| 300 | 6 | 255.2 | 257.4 | 259.3 | 0.86 |
+| 600 | 6 | 509.4 | 513.0 | 514.5 | 0.85 |
+
+The window measured is from the read that cached the value (the cache's own
+lifetime). Over a 20× span the realized window stays a near-constant fraction of
+the value set — about **0.85× the `cacheTtl`**. You get most of, but not quite the
+full, nominal TTL, consistently. The 60 s row (~54.5 s) reproduces v0.2.0's ~53 s,
+so the two runs agree at their shared point.
+
+**The ~0.85, not ~1.0, is the honest surprise, and we do not over-explain it.** A
+region that warms its own cache and is then overwritten should, in the simplest
+model, serve stale for the full `cacheTtl`; the realized window is ~15 % shorter,
+stably, at every TTL. Candidate causes are early cache eviction (the docs say the
+value lives "until the end of the `cacheTtl` **or eviction**") and internal TTL
+accounting we cannot see from outside. We measured the number; we do not claim the
+mechanism for the shortfall.
+
+**The write-path colo runs a few seconds shorter than the rest.** SJC (`wnam`) is
+the colo the driver's `put` lands in, and across every TTL it flips ~3–5 s sooner
+than MAD/SIN (ratio 0.68 at 30 s, where a fixed few-second offset is a big fraction,
+rising toward the others as the TTL grows). The `put` write-through seeds SJC's
+cache a few seconds before the warm read does, so SJC's entry expires first — the
+same read-your-writes bleed-through finding 2 saw as its enam outlier, here as a
+small steady offset.
+
 ## Method — why the timing is trustworthy
 
 - **Placement verified, not assumed:** each Durable Object reported its real colo
@@ -67,17 +113,23 @@ the write, it is read-your-writes (finding 1), not a cached cross-region read.
   The Worker's `Date.now()` is reported but not trusted — the Workers runtime
   freezes its clock between I/O.
 - Worker responses `cache-control: no-store`, so only KV/DO timing is measured.
-- Fresh unique key per trial.
-- Budget across both runs: ~79 writes + a few thousand reads/DO-requests — under
-  10% of the free-tier daily KV allowance, and a separate bucket from D1.
+- Fresh unique key per trial; in the sweep each cell has its own key and its own
+  thread, so one cell's poll schedule never delays another's first observation.
+- Budget across all three runs: ~139 writes + a few thousand reads/DO-requests —
+  under 10% of the free-tier daily KV allowance, and a separate bucket from D1.
 
 ## What this still does NOT claim
 
-- One account, one time window, **default cacheTtl (60 s)**. The cacheTtl was not
-  swept — a different `cacheTtl` would move the window directly.
-- "No push-invalidation" is inferred from the ~53 s passive-expiry result, not
-  from Cloudflare internals.
-- 6 colos, 6 trials each — enough to show the clustering, not a global census.
+- One account, one time window. The `cacheTtl` is now swept (finding 3), so the
+  default-only caveat is retired; the ~15% shortfall below the nominal TTL is
+  measured but its mechanism is not claimed.
+- The sweep window is read to the first poll after expiry, so its resolution is the
+  poll interval (2 s) — negligible against 30–600 s windows, but it is why the
+  smallest TTL has the coarsest ratio.
+- "No push-invalidation" is inferred from the passive-expiry result, not from
+  Cloudflare internals.
+- 6 colos × 6 trials (cross-region) and 3 regions × 2 trials per TTL (sweep) —
+  enough to show the clustering and the linear scaling, not a global census.
 
 ## Relation to the Cloudflare docs
 
@@ -88,17 +140,22 @@ locations which have recently read a previous version of a given key"; and "your
 data is not sent automatically to every location's cache" — other locations update
 "as their cached versions of the data time out." The default `cacheTtl` is 60 s.
 
+The read docs also already tie the window to `cacheTtl` qualitatively: an
+overwrite "will not be visible until the cached value expires," and a cached value
+lives "until the end of the `cacheTtl` or eviction."
+
 So this is **not** a documentation correction and there is no clarification PR to
 file. The contribution is the measured numbers behind the docs' qualitative "up to
-60 seconds or more": in practice a cached cross-region reader lags by ~53 s (one
-`cacheTtl`), clustered just under 60 s and never past it across 36 trials, while
-the writing region is sub-second. The docs say "up to 60 s or more"; this says how
-much, where, and why.
+60 seconds or more": a cached cross-region reader lags by one `cacheTtl` (~53 s at
+the default, clustered just under 60 s and never past it across 36 trials), the
+writing region is sub-second, and the window scales linearly with the `cacheTtl`
+you set — about 0.85× it from 30 s to 600 s. The docs say "up to the `cacheTtl`";
+this says how much of it you actually get, where, and why.
 
 ## For a developer, in one line
 
 Your own Worker reads your write immediately; a cache in another region can serve
-the old value for most of a minute; a `put` will not speed that up — only a shorter
-`cacheTtl` will.
+the old value for most of your `cacheTtl` (measured ~0.85× it, 30 s to 600 s); a
+`put` will not speed that up — only a shorter `cacheTtl` will, in direct proportion.
 
 F-Keys LLC | www.f-keys.com

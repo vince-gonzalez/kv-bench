@@ -6,7 +6,7 @@ authors:
     given-names: Vince
     orcid: https://orcid.org/0009-0005-3640-014X
     email: vincegonzalez@me.com
-version: 0.2.0
-date-released: 2026-10-27
+version: 0.3.0
+date-released: 2026-10-28
 repository-code: https://github.com/vince-gonzalez/kv-bench
 license: MIT

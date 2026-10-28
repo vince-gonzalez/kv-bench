@@ -13,10 +13,15 @@ ceiling, not a measurement. This harness measures the real distribution.
   clean read-after-write latency with no stale-cache confound.
 - **Mode B — overwrite cache window.** Write a key, read it once so the edge
   caches it, overwrite it, then poll until the new value appears. This measures
-  the edge-cache staleness window (KV `cacheTtl`, minimum 60s).
+  the edge-cache staleness window (KV `cacheTtl`, minimum **30s**, default 60s).
+- **Mode C — cacheTtl sweep (`mr/cachettl.py`).** Same as B, but read with an
+  explicit `cacheTtl` and sweep it (30/60/120/300/600s) across regions pinned by
+  Durable Object `locationHint`. Shows the stale window scales *linearly* with the
+  TTL you set — about 0.85× it — not just the 60s default Mode B measured.
 
-The interesting question the two modes separate: is KV's "up to 60s" about
-*write propagation* (Mode A) or about *edge-cache TTL* (Mode B)?
+The interesting question the modes separate: is KV's "up to 60s" about
+*write propagation* (Mode A), *edge-cache TTL* (Mode B), and does that window move
+with the `cacheTtl` you choose (Mode C — yes, in direct proportion)?
 
 ## How timing is kept honest
 
@@ -27,11 +32,13 @@ in-isolate timer cannot measure this. (Learned the hard way on a previous bench.
 
 ## What it does NOT claim
 
-- **One region.** The driver runs from one location, so every request lands in
-  one edge location. This is read-after-write *at the writing region*, not
-  cross-region global propagation.
+- **Mode A/B run from one region.** The single-region driver's requests land in
+  one edge location — read-after-write *at the writing region*, not cross-region
+  propagation. The cross-region window and the cacheTtl sweep use Durable Objects
+  pinned by `locationHint` to reach other regions.
 - One account, free tier, one time window. Stated as unmeasured, never
-  extrapolated.
+  extrapolated. The sweep's ~0.85× (not 1.0×) shortfall below the nominal TTL is
+  measured but its mechanism is not claimed. See `results/FINDINGS.md`.
 
 ## Run it
 
@@ -39,13 +46,17 @@ in-isolate timer cannot measure this. (Learned the hard way on a previous bench.
    — the committed file keeps a placeholder on purpose).
 2. `wrangler deploy`
 3. Set the gate secret: `wrangler secret put BENCH_TOKEN`
-4. Point the driver at the deployed Worker and run it:
+4. Point a driver at the deployed Worker and run it:
    - `BENCH_BASE` = the Worker origin (`https://kv-bench.<subdomain>.workers.dev`)
    - `BENCH_TOKEN` = the same secret
-   - `python drive.py`
+   - `python drive.py` — single-region Modes A + B.
+   - Cross-region + sweep use the `mr/` Worker (Durable Objects pinned by
+     `locationHint`): deploy `mr/`, then `python mr/drive.py` (cross-region window)
+     or `python mr/cachettl.py` (Mode C — the cacheTtl sweep).
 
-Defaults: 50 fresh-key trials + 8 cache-window trials. KV free tier is 1,000
-writes/day and 100,000 reads/day, a separate bucket from D1 — this run spends
-well under 10% of either.
+Defaults: 50 fresh-key trials + 8 cache-window trials (Modes A/B); 30 cells
+(5 TTLs × 3 regions × 2 trials) for the sweep. KV free tier is 1,000 writes/day
+and 100,000 reads/day, a separate bucket from D1 — every run here spends well
+under 10% of either.
 
 F-Keys LLC | www.f-keys.com

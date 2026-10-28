@@ -35,7 +35,7 @@ if not TOKEN:
     sys.exit("ZENODO_TOKEN is not set")
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TAG = "v0.2.0"
+TAG = "v0.3.0"
 ARCHIVE = os.path.join(HERE, "kv-bench-%s.zip" % TAG)
 PUBLISH = "--publish" in sys.argv
 
@@ -82,17 +82,30 @@ and never reached 60. A <code>put</code> does not push-invalidate remote caches,
 so the window is passive cache expiry, not propagation latency; the small
 per-region spread tracks prime order, not geography.</p>
 
+<p><b>The window scales with the cacheTtl you set.</b> Reading with an explicit
+<code>cacheTtl</code> and sweeping it across the documented range (30, 60, 120,
+300, 600&nbsp;s) over three regions moves the stale window in direct proportion:
+the realized window is a near-constant ~0.85 of the value set, linear across a 20x
+span (median 24.4, 54.5, 104.3, 257.4, 513.0&nbsp;s). The 60&nbsp;s point
+reproduces the cross-region run's ~53&nbsp;s. The ~15% shortfall below the nominal
+TTL is stable but its mechanism (early eviction, internal accounting) is not
+claimed. This retires the earlier run's single-TTL limitation.</p>
+
 <p><b>This is a measurement, not a documentation correction.</b> The KV docs
-already describe this behaviour qualitatively and correctly. The contribution is
-the numbers behind "up to 60 seconds or more": how much, where, and why.</p>
+already describe this behaviour qualitatively and correctly, including that an
+overwrite is invisible "until the cached value expires." The contribution is the
+numbers behind "up to the cacheTtl": how much of it you actually get, where, and
+why.</p>
 
 <p><b>Method.</b> Every trial is timed from the driver's wall clock outside the
 edge, because the Workers runtime freezes <code>Date.now()</code> between I/O and
 an in-isolate timer cannot measure this. Worker responses are sent
 <code>no-store</code> so only KV timing is measured. A fresh unique key is used
-per read-after-write trial. Stated limits: one account, free tier, one time
-window, default <code>cacheTtl</code> (60&nbsp;s), which was not swept; six
-colos, six trials each.</p>
+per trial; sweep cells run concurrently, each on its own key and thread, so no
+cell's poll schedule delays another's. Stated limits: one account, free tier, one
+time window; the <code>cacheTtl</code> floor is 30&nbsp;s (60&nbsp;s is the
+default); six colos x six trials (cross-region) and three regions x two trials per
+TTL (sweep).</p>
 """.strip(),
     }
 }
